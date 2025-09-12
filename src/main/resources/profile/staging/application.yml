@@ -3,10 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5442/ecommercedb
+    url: jdbc:postgresql://localhost:5442/postgres
     username: postgres
     password: 1
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,6 +16,5 @@ spring:
         enable_lazy_load_no_trans: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
   profiles:
     active: staging
