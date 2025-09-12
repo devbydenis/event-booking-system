@@ -1,6 +1,7 @@
 package com.sinaukoding.eventbookingsystem.controller.managementuser;
 
 import com.sinaukoding.eventbookingsystem.model.filter.UserFilterRecord;
+import com.sinaukoding.eventbookingsystem.model.request.UserRequestRecord;
 import com.sinaukoding.eventbookingsystem.model.response.BaseResponse;
 import com.sinaukoding.eventbookingsystem.service.managementuser.UserService;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,27 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private UserService userService;
+
+    @PostMapping("add")
+    @PreAuthorize("hasRole('ADMIN')")
+    public BaseResponse<?> addUserController(@RequestBody UserRequestRecord request){
+        userService.addUser(request);
+        return BaseResponse.ok("Data user berhasil disimpan", null);
+    }
+
+    @PostMapping("edit")
+    @PreAuthorize("hasRole('ADMIN')")
+    public BaseResponse<?> editUserController(@RequestBody UserRequestRecord request){
+        userService.editUser(request);
+        return BaseResponse.ok("Data user berhasil diubah", null);
+    }
+
+    @PostMapping("delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public BaseResponse<?> deleteUserController(String id){
+        userService.deleteUser(id);
+        return BaseResponse.ok("Data user berhasil dihapus", null);
+    }
 
     @GetMapping("find-all")
     @PreAuthorize("hasRole('ADMIN')")
