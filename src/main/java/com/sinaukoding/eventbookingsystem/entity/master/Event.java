@@ -52,10 +52,6 @@ public class Event {
     @Column(nullable = false)
     private Double harga;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private Set<EventImage> listImage = new HashSet<>();
