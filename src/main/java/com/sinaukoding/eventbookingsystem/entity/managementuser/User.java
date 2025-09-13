@@ -2,7 +2,6 @@ package com.sinaukoding.eventbookingsystem.entity.managementuser;
 
 import com.sinaukoding.eventbookingsystem.entity.app.BaseEntity;
 import com.sinaukoding.eventbookingsystem.model.enums.Role;
-import com.sinaukoding.eventbookingsystem.model.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,6 +44,7 @@ public class User extends BaseEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     private String token;

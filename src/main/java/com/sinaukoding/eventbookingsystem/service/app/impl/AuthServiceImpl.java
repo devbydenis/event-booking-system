@@ -3,6 +3,7 @@ package com.sinaukoding.eventbookingsystem.service.app.impl;
 import com.sinaukoding.eventbookingsystem.entity.managementuser.User;
 import com.sinaukoding.eventbookingsystem.mapper.app.RegisterUserMapper;
 import com.sinaukoding.eventbookingsystem.model.app.SimpleMap;
+import com.sinaukoding.eventbookingsystem.model.enums.Role;
 import com.sinaukoding.eventbookingsystem.model.request.LoginRequestRecord;
 import com.sinaukoding.eventbookingsystem.model.request.RegisterRequestRecord;
 import com.sinaukoding.eventbookingsystem.repository.managementuser.UserRepository;
@@ -41,13 +42,13 @@ public class AuthServiceImpl implements AuthService {
 
         var user = registerUserMapper.requestToEntity(request);
         user.setPassword(passwordEncoder.encode(request.password()));
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         SimpleMap registeredUser = new SimpleMap();
         registeredUser.put("nama", request.nama());
         registeredUser.put("username", request.username());
         registeredUser.put("email", request.email());
-        registeredUser.put("password", passwordEncoder.encode(request.password()));
 
         return registeredUser;
     }
