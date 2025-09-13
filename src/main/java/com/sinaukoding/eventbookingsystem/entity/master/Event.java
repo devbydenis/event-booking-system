@@ -1,6 +1,7 @@
 package com.sinaukoding.eventbookingsystem.entity.master;
 
 
+import com.sinaukoding.eventbookingsystem.entity.app.BaseEntity;
 import com.sinaukoding.eventbookingsystem.model.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -25,7 +26,7 @@ import java.util.Set;
         @Index(name = "idx_event_nama", columnList = "nama"),
         @Index(name = "idx_event_harga", columnList = "harga")
 })
-public class Event {
+public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
