@@ -1,6 +1,7 @@
 package com.sinaukoding.eventbookingsystem.entity.master;
 
 
+import com.sinaukoding.eventbookingsystem.entity.app.BaseEntity;
 import com.sinaukoding.eventbookingsystem.model.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -25,7 +26,7 @@ import java.util.Set;
         @Index(name = "idx_event_nama", columnList = "nama"),
         @Index(name = "idx_event_harga", columnList = "harga")
 })
-public class Event {
+public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -51,10 +52,6 @@ public class Event {
     @Min(value = 0, message = "Harga tidak boleh negatif")
     @Column(nullable = false)
     private Double harga;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event", orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
