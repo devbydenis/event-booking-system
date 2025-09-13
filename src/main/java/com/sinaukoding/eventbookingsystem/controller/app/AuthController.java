@@ -18,7 +18,19 @@ public class AuthController {
 
     @PostMapping("register")
     public BaseResponse<?> register(@RequestBody RegisterRequestRecord request){
-        return BaseResponse.ok("Register akun berhasil", authService.register(request));
+        return BaseResponse.ok("Register berhasil", authService.register(request));
+    }
+
+    @PostMapping("login")
+    public BaseResponse<?> login(@RequestBody LoginRequestRecord request) {
+        return BaseResponse.ok("Login berhasil", authService.login(request));
+    }
+
+    @GetMapping("logout")
+    public BaseResponse<?> logout(@AuthenticationPrincipal UserLoggedInConfig userLoggedInConfig) {
+        var userLoggedIn = userLoggedInConfig.getUser();
+        authService.logout(userLoggedIn);
+        return BaseResponse.ok("Berhasil logout", null);
     }
 
 }
