@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
         @Index(name = "idx_user_modified_date", columnList = "modifiedDate"),
         @Index(name = "idx_user_username", columnList = "username"),
         @Index(name = "idx_user_email", columnList = "email"),
-        @Index(name = "idx_user_status", columnList = "status"),
         @Index(name = "idx_user_role", columnList = "role")
 })
 public class User extends BaseEntity {
