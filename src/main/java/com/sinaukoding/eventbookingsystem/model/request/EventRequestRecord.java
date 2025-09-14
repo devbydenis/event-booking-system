@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 public record EventRequestRecord(
+        String id,
         @NotBlank(message = "Nama tidak boleh kosong") String nama,
         @NotBlank(message = "Deskripsi tidak boleh kosong") String deskripsi,
         @NotNull(message = "Tanggal tidak boleh kosong") LocalDateTime tanggalEvent,

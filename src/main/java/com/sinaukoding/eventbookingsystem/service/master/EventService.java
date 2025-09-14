@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface EventService {
-    Page<SimpleMap> findAllEvent(EventFilterRecord filterRequest, Pageable pageable);
     void createEvent(EventRequestRecord request);
+    Page<SimpleMap> findAllEvent(EventFilterRecord filterRequest, Pageable pageable);
+    void edit(EventRequestRecord reuest);
 }

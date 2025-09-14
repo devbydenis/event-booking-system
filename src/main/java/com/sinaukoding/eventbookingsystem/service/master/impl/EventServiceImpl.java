@@ -68,4 +68,13 @@ public class EventServiceImpl implements EventService {
         return AppPage.create(listData, pageable, listAllEvent.getTotalElements());
     }
 
+    @Override
+    public void edit(EventRequestRecord request) {
+        validatorService.validator(request);
+
+        var eventExisting = eventRepository.findById(request.id()).orElseThrow(() -> new RuntimeException("Event tidak ditemukan"));
+        var event = eventMapper.requestToEntity(request);
+        event.setId(eventExisting.getId());
+        eventRepository.save(event);
+    }
 }

@@ -37,11 +37,18 @@ public class EventController {
             @Parameter(name = "size", description = "Size Per Page", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "10"), required = true),
             @Parameter(name = "sort", description = "Sorting Data", in = ParameterIn.QUERY, schema = @Schema(type = "string", defaultValue = "modifiedDate,desc"), required = true)
     })
-    public BaseResponse<?> findAll(
+    public BaseResponse<?> findAllEventController(
             @PageableDefault(direction = Sort.Direction.DESC, sort = "modifiedDate") Pageable pageable,
             @RequestBody EventFilterRecord filterRequest
             ) {
         return BaseResponse.ok("success", eventService.findAllEvent(filterRequest, pageable));
+    }
+
+    @PostMapping("update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public BaseResponse<?> editEventController(@RequestBody EventRequestRecord request){
+        eventService.edit(request);
+        return BaseResponse.ok("Data berhasil di edit", null);
     }
 
 }
