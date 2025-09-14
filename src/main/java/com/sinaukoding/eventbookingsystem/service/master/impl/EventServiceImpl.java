@@ -43,7 +43,6 @@ public class EventServiceImpl implements EventService {
 
         } catch (Exception e) {
             log.error("Gagal menambahkan data event: {}", e.getMessage());
-            System.out.println(e.getMessage());
         }
     }
 
@@ -52,7 +51,7 @@ public class EventServiceImpl implements EventService {
         CustomBuilder<Event> builder = new CustomBuilder<>();
 
         FilterUtil.builderConditionNotBlankLike("nama", filterRequest.nama(), builder);
-        FilterUtil.builderConditionNotBlankLike("lokasi", filterRequest.nama(), builder);
+        FilterUtil.builderConditionNotBlankLike("lokasi", filterRequest.lokasi(), builder);
 
         Page<Event> listAllEvent = eventRepository.findAll(builder.build(), pageable);
         List<SimpleMap> listData = listAllEvent.stream().map(event -> {
@@ -88,7 +87,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void edit(EventRequestRecord request) {
+    public void editEvent(EventRequestRecord request) {
         validatorService.validator(request);
 
         var eventExisting = eventRepository.findById(request.id()).orElseThrow(() -> new RuntimeException("Event tidak ditemukan"));
