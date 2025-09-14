@@ -31,5 +31,19 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
+    @Override
+    public  void updateBooking(BookingRequestRecord request){
+        try{
+            validatorService.validator(request);
+
+            var bookingExisting = bookingRepository.findById(request.id()).orElseThrow(() -> new RuntimeException("Booking tidak ditemukan"));
+            var booking = bookingMapper.requestToEntity(request);
+            booking.setId(bookingExisting.getId());
+            bookingRepository.save(booking);
+        } catch (Exception e) {
+            log.error("Gagal mengubah data booking: {}", e.getMessage());
+        }
+    }
+
 
 }

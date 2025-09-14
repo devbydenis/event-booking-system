@@ -5,4 +5,5 @@ import com.sinaukoding.eventbookingsystem.model.request.BookingRequestRecord;
 
 public interface BookingService {
     void createBooking(BookingRequestRecord request);
+    void updateBooking(BookingRequestRecord request);
 }

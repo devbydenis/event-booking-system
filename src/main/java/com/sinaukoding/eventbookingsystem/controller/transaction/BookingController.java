@@ -24,4 +24,11 @@ public class BookingController {
         return BaseResponse.ok("Berhasil membuat booking baru", null);
     }
 
+    @PostMapping("update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public BaseResponse<?> updateBookingController(@RequestBody BookingRequestRecord request) {
+        bookingService.updateBooking(request);
+        return BaseResponse.ok("Berhasil mengubah booking dengan id " + request.userId(), null);
+    }
+
 }
