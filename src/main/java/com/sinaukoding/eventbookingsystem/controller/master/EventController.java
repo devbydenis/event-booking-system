@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("event")
 @RequiredArgsConstructor
-@Tag(name = "Event API")
 public class EventController {
 
     private final EventService eventService;
@@ -48,7 +47,14 @@ public class EventController {
     @PreAuthorize("hasRole('ADMIN')")
     public BaseResponse<?> editEventController(@RequestBody EventRequestRecord request){
         eventService.edit(request);
-        return BaseResponse.ok("Data berhasil di edit", null);
+        return BaseResponse.ok("Data berhasil diubah", null);
+    }
+
+    @PostMapping("delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public BaseResponse<?> deleteEventController(String id){
+        eventService.delete(id);
+        return BaseResponse.ok("Data berhasil dihapus", null);
     }
 
 }

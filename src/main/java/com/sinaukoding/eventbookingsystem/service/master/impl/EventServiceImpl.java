@@ -77,4 +77,16 @@ public class EventServiceImpl implements EventService {
         event.setId(eventExisting.getId());
         eventRepository.save(event);
     }
+
+    @Override
+    public void delete(String id) {
+        var eventExisting = eventRepository.existsById(id);
+
+        if (!eventExisting) {
+            throw new RuntimeException("Event dengan id "+ id +" tidak tersedia");
+        }
+
+        eventRepository.deleteById(id);
+    }
+
 }
