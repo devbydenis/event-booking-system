@@ -15,7 +15,6 @@ public record EventRequestRecord(
         @NotBlank(message = "Lokasi tidak boleh kosong") String lokasi,
         @NotNull(message = "Kapasitas tidak boleh kosong") Integer kapasitas,
         @NotNull(message = "Harga tidak boleh kosong") Double harga,
-        @NotNull(message = "Status tidak boleh kosong") Status status,
         @NotEmpty(message = "Gambar tidak boleh kosong") Set<String> listImage
 ) {
 }

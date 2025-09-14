@@ -20,12 +20,12 @@ public class EventMapper {
                 .harga(request.harga())
                 .build();
 
-        event.setListImage(request.listImage().stream().map(path ->
-            EventImage.builder()
-                    .path(path)
-                    .event(event)
-                    .build()
-        ).collect(Collectors.toSet()));
+        event.setListImage(request.listImage().stream()
+                .map(path -> EventImage.builder()
+                        .path(path)
+                        .event(event)
+                        .build())
+                .collect(Collectors.toSet()));
 
         return event;
     }
