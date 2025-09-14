@@ -43,6 +43,11 @@ public class EventController {
         return BaseResponse.ok("success", eventService.findAllEvent(filterRequest, pageable));
     }
 
+    @GetMapping("find-by-id/{id}")
+    public BaseResponse<?>findByIdEventController(@PathVariable String id) {
+        return BaseResponse.ok("Berhasil mengambil data dengan id" + id, eventService.findById(id));
+    }
+
     @PostMapping("update")
     @PreAuthorize("hasRole('ADMIN')")
     public BaseResponse<?> editEventController(@RequestBody EventRequestRecord request){
@@ -52,7 +57,7 @@ public class EventController {
 
     @PostMapping("delete")
     @PreAuthorize("hasRole('ADMIN')")
-    public BaseResponse<?> deleteEventController(String id){
+    public BaseResponse<?> deleteEventController(@PathVariable String id){
         eventService.delete(id);
         return BaseResponse.ok("Data berhasil dihapus", null);
     }

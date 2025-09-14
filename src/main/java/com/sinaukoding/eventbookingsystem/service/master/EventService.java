@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 public interface EventService {
     void createEvent(EventRequestRecord request);
     Page<SimpleMap> findAllEvent(EventFilterRecord filterRequest, Pageable pageable);
+    SimpleMap findById(String id);
     void edit(EventRequestRecord request);
     void delete(String id);
 }

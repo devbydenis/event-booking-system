@@ -2,6 +2,7 @@ package com.sinaukoding.eventbookingsystem.service.master.impl;
 
 import com.sinaukoding.eventbookingsystem.builder.CustomBuilder;
 import com.sinaukoding.eventbookingsystem.entity.master.Event;
+import com.sinaukoding.eventbookingsystem.entity.master.EventImage;
 import com.sinaukoding.eventbookingsystem.mapper.master.EventMapper;
 import com.sinaukoding.eventbookingsystem.model.app.AppPage;
 import com.sinaukoding.eventbookingsystem.model.app.SimpleMap;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -66,6 +68,23 @@ public class EventServiceImpl implements EventService {
         }).toList();
 
         return AppPage.create(listData, pageable, listAllEvent.getTotalElements());
+    }
+
+    @Override
+    public SimpleMap findById(String id) {
+        var event = eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event tidak ditemukan"));
+
+        SimpleMap data = new SimpleMap();
+        data.put("id", event.getId());
+        data.put("nama", event.getNama());
+        data.put("deskripsi", event.getDeskripsi());
+        data.put("tanggal", event.getTanggalEvent());
+        data.put("lokasi", event.getLokasi());
+        data.put("kapasitas", event.getKapasitas());
+        data.put("harga", event.getHarga());
+        data.put("eventImages", event.getListImage().stream().map(EventImage::getPath).collect(Collectors.toSet()));
+
+        return data;
     }
 
     @Override
