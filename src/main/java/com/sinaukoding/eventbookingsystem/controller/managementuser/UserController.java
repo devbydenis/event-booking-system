@@ -47,4 +47,9 @@ public class UserController {
     ){
         return BaseResponse.ok(null, userService.findAllUser(filterRequest, pageable));
     }
+
+//    @GetMapping("find-by-id/{id}")
+//    public BaseResponse<?> findByIdBookingController(@PathVariable String id){
+//        return BaseResponse.ok("Berhasil memuat booking berdasarkan id", userService.findByIdBooking(id));
+//    }
 }
