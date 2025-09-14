@@ -18,3 +18,20 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   profiles:
     active: development
+
+app:
+  upload-directory: event-uploads
+  folder-temp: ./event-temp/
+
+logging:
+  level:
+    com.sinaukoding.ecommerce: TRACE
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    defaultModelsExpandDepth: -1
+    docExpansion: none
+    tagsSorter: alpha
+    operationsSorter: alpha

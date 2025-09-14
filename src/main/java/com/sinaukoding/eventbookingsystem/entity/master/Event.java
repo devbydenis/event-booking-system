@@ -22,7 +22,6 @@ import java.util.Set;
 @Table(name = "m_event", indexes = {
         @Index(name = "idx_event_created_date", columnList = "createdDate"),
         @Index(name = "idx_event_modified_date", columnList = "modifiedDate"),
-        @Index(name = "idx_event_status", columnList = "status"),
         @Index(name = "idx_event_nama", columnList = "nama"),
         @Index(name = "idx_event_harga", columnList = "harga")
 })

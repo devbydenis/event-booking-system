@@ -39,7 +39,7 @@ public class UserController {
         return BaseResponse.ok("Data user berhasil dihapus", null);
     }
 
-    @GetMapping("find-all")
+    @PostMapping("find-all")
     @PreAuthorize("hasRole('ADMIN')")
     public BaseResponse<?> findAllUserController(
             @PageableDefault(direction = Sort.Direction.DESC, sort = "modifiedDate") Pageable pageable,

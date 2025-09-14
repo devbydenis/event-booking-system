@@ -1,29 +1,50 @@
 package com.sinaukoding.eventbookingsystem.service.master.impl;
 
 import com.sinaukoding.eventbookingsystem.builder.CustomBuilder;
-import com.sinaukoding.eventbookingsystem.builder.CustomSpecification;
 import com.sinaukoding.eventbookingsystem.entity.master.Event;
+import com.sinaukoding.eventbookingsystem.entity.master.EventImage;
 import com.sinaukoding.eventbookingsystem.mapper.master.EventMapper;
 import com.sinaukoding.eventbookingsystem.model.app.AppPage;
 import com.sinaukoding.eventbookingsystem.model.app.SimpleMap;
 import com.sinaukoding.eventbookingsystem.model.filter.EventFilterRecord;
+import com.sinaukoding.eventbookingsystem.model.request.EventRequestRecord;
 import com.sinaukoding.eventbookingsystem.repository.master.EventRepository;
+import com.sinaukoding.eventbookingsystem.service.app.ValidatorService;
 import com.sinaukoding.eventbookingsystem.service.master.EventService;
 import com.sinaukoding.eventbookingsystem.util.FilterUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final ValidatorService validatorService;
+
+    @Override
+    public void createEvent(EventRequestRecord request){
+        try {
+            // validator mandatory
+            validatorService.validator(request);
+
+            // mapping ke entity lalu simpan ke db
+            var event = eventMapper.requestToEntity(request);
+            eventRepository.save(event);
+
+        } catch (Exception e) {
+            log.error("Gagal menambahkan data event: {}", e.getMessage());
+        }
+    }
 
     @Override
     public Page<SimpleMap> findAllEvent(EventFilterRecord filterRequest, Pageable pageable){
@@ -31,26 +52,59 @@ public class EventServiceImpl implements EventService {
 
         FilterUtil.builderConditionNotBlankLike("nama", filterRequest.nama(), builder);
         FilterUtil.builderConditionNotBlankLike("lokasi", filterRequest.lokasi(), builder);
-        FilterUtil.builderConditionNotNullEqual("tanggalEvent", filterRequest.tanggalEvent(), builder);
-
-        if (filterRequest.harga() != null) {
-            builder.with("harga", CustomSpecification.OPERATION_EQUAL, filterRequest.harga());
-        }
 
         Page<Event> listAllEvent = eventRepository.findAll(builder.build(), pageable);
         List<SimpleMap> listData = listAllEvent.stream().map(event -> {
-            SimpleMap data = SimpleMap.createMap()
-                    .add("id", event.getId())
-                    .add("nama", event.getNama())
-                    .add("deskripsi", event.getDeskripsi())
-                    .add("tanggalEvent", event.getTanggalEvent())
-                    .add("lokasi", event.getLokasi())
-                    .add("kapasitas", event.getKapasitas())
-                    .add("harga", event.getHarga());
+            SimpleMap data = new SimpleMap();
+                    data.put("id", event.getId());
+                    data.put("nama", event.getNama());
+                    data.put("deskripsi", event.getDeskripsi());
+                    data.put("tanggalEvent", event.getTanggalEvent());
+                    data.put("lokasi", event.getLokasi());
+                    data.put("kapasitas", event.getKapasitas());
+                    data.put("harga", event.getHarga());
             return data;
         }).toList();
 
         return AppPage.create(listData, pageable, listAllEvent.getTotalElements());
+    }
+
+    @Override
+    public SimpleMap findById(String id) {
+        var event = eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event tidak ditemukan"));
+
+        SimpleMap data = new SimpleMap();
+        data.put("id", event.getId());
+        data.put("nama", event.getNama());
+        data.put("deskripsi", event.getDeskripsi());
+        data.put("tanggal", event.getTanggalEvent());
+        data.put("lokasi", event.getLokasi());
+        data.put("kapasitas", event.getKapasitas());
+        data.put("harga", event.getHarga());
+        data.put("eventImages", event.getListImage().stream().map(EventImage::getPath).collect(Collectors.toSet()));
+
+        return data;
+    }
+
+    @Override
+    public void editEvent(EventRequestRecord request) {
+        validatorService.validator(request);
+
+        var eventExisting = eventRepository.findById(request.id()).orElseThrow(() -> new RuntimeException("Event tidak ditemukan"));
+        var event = eventMapper.requestToEntity(request);
+        event.setId(eventExisting.getId());
+        eventRepository.save(event);
+    }
+
+    @Override
+    public void delete(String id) {
+        var eventExisting = eventRepository.existsById(id);
+
+        if (!eventExisting) {
+            throw new RuntimeException("Event dengan id "+ id +" tidak tersedia");
+        }
+
+        eventRepository.deleteById(id);
     }
 
 }

@@ -1,9 +1,10 @@
-package com.sinaukoding.eventbookingsystem.controller.master;
+package com.sinaukoding.eventbookingsystem.controller.transaction;
 
+import com.sinaukoding.eventbookingsystem.model.filter.BookingFilterRecord;
 import com.sinaukoding.eventbookingsystem.model.filter.EventFilterRecord;
-import com.sinaukoding.eventbookingsystem.model.request.EventRequestRecord;
+import com.sinaukoding.eventbookingsystem.model.request.BookingRequestRecord;
 import com.sinaukoding.eventbookingsystem.model.response.BaseResponse;
-import com.sinaukoding.eventbookingsystem.service.master.EventService;
+import com.sinaukoding.eventbookingsystem.service.transaction.BookingService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -16,17 +17,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("event")
+@RequestMapping("booking")
 @RequiredArgsConstructor
-public class EventController {
+public class BookingController {
 
-    private final EventService eventService;
+    public final BookingService bookingService;
 
     @PostMapping("create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public BaseResponse<?> createEventController(@RequestBody EventRequestRecord request) {
-        eventService.createEvent(request);
-        return BaseResponse.ok("Data berhasil disimpan", null);
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public BaseResponse<?> createBookingController(@RequestBody BookingRequestRecord request) {
+        bookingService.createBooking(request);
+        return BaseResponse.ok("Berhasil membuat booking baru", null);
     }
 
     @PostMapping("find-all")
@@ -37,28 +38,28 @@ public class EventController {
     })
     public BaseResponse<?> findAllEventController(
             @PageableDefault(direction = Sort.Direction.DESC, sort = "modifiedDate") Pageable pageable,
-            @RequestBody EventFilterRecord filterRequest
-            ) {
-        return BaseResponse.ok("success", eventService.findAllEvent(filterRequest, pageable));
+            @RequestBody BookingFilterRecord filterRequest
+    ) {
+        return BaseResponse.ok("success", bookingService.findAllBooking(filterRequest, pageable));
     }
 
     @GetMapping("find-by-id/{id}")
-    public BaseResponse<?>findByIdEventController(@PathVariable String id) {
-        return BaseResponse.ok("Berhasil mengambil data dengan id" + id, eventService.findById(id));
+    public BaseResponse<?> findByIdBookingController(@PathVariable String id){
+        return BaseResponse.ok("Berhasil memuat booking berdasarkan id", bookingService.findByIdBooking(id));
     }
 
     @PostMapping("update")
     @PreAuthorize("hasRole('ADMIN')")
-    public BaseResponse<?> editEventController(@RequestBody EventRequestRecord request){
-        eventService.editEvent(request);
-        return BaseResponse.ok("Data berhasil diubah", null);
+    public BaseResponse<?> updateBookingController(@RequestBody BookingRequestRecord request) {
+        bookingService.updateBooking(request);
+        return BaseResponse.ok("Berhasil mengubah booking dengan id " + request.userId(), null);
     }
 
     @PostMapping("delete")
     @PreAuthorize("hasRole('ADMIN')")
-    public BaseResponse<?> deleteEventController(@PathVariable String id){
-        eventService.delete(id);
-        return BaseResponse.ok("Data berhasil dihapus", null);
+    public  BaseResponse<?> deleteBookingController(@PathVariable String id) {
+        bookingService.deleteBooking(id);
+        return BaseResponse.ok("berhasil menghapus booking dengan id " + id, null);
     }
 
 }

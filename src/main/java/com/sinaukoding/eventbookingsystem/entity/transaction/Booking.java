@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
         @Index(name = "idx_booking_user_id", columnList = "userId"),
         @Index(name = "idx_booking_created_date", columnList = "createdDate"),
         @Index(name = "idx_booking_modified_date", columnList = "modifiedDate"),
-        @Index(name = "idx_booking_tanggal_booking", columnList = "tanggalBooking"),
 })
 public class Booking extends BaseEntity {
 
@@ -37,9 +36,6 @@ public class Booking extends BaseEntity {
 
     @Column(nullable = false)
     private String eventId;
-
-    @Column(nullable = false)
-    private LocalDateTime tanggalBooking;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
